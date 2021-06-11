@@ -14,7 +14,7 @@ public class Flight {
     private Date departureTime;
     private Date arrivalTime;
     private String cancellationMotive;
-    private List<String> incidentes;
+    private List<String> incidents;
     private String airline;
     private Aircraft aircraft;
 }

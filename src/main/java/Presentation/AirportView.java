@@ -59,6 +59,7 @@ public class AirportView {
     }
 
     public void displayFlightsList(){
+        controller.getFlightsList();
         //iterar y mostrar los vuelos en
         var flights = controller.getFlightsList();
 
