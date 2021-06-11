@@ -1,4 +1,4 @@
-package Model;
+package Data;
 
 import lombok.Data;
 
@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class FlightModel {
+public class Flight {
     private int id;
     private String status;
-    private LocationModel origin;
-    private LocationModel destination;
+    private Location origin;
+    private Location destination;
     private Date departureTime;
     private Date arrivalTime;
     private String cancellationMotive;
     private List<String> incidentes;
     private String airline;
-    private AircraftModel aircraft;
+    private Aircraft aircraft;
 }

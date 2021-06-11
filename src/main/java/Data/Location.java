@@ -1,10 +1,9 @@
-package Model;
+package Data;
 
 import lombok.Data;
 
 @Data
-public class LocationModel {
+public class Location {
     private String country;
     private String city;
-    private String climate;
 }
