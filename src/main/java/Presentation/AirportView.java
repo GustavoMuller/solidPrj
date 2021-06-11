@@ -24,6 +24,7 @@ public class AirportView {
     }
 
     public void displayFlightsList(){
+        controller.getFlightsList();
         //iterar y mostrar los vuelos en
     }
 }
