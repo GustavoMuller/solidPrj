@@ -10,6 +10,20 @@ public class AirportView {
     }
 
     public void displayMenu(){
+        System.out.println("""
+                =============== AIRPORT ===============
+                
+                Menu:
+                1. Display flights list
+                2. Display flight details
+                3. Add flight
+                4. Add flights from file (xlsx)
+                5. Update flight status
+                6. Reports
+                """);
+    }
 
+    public void displayFlightsList(){
+        //iterar y mostrar los vuelos en
     }
 }
