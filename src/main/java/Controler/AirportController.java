@@ -3,8 +3,7 @@ package Controler;
 import Data.Airport;
 import Data.Flight;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AirportController {
@@ -40,21 +39,21 @@ public class AirportController {
     }
 
     //Overloaded method to update a flight's status
-    public void updateFlight(int id, String status, Date arrivalTime){
+    public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){
         Flight flight = getFLightDetails(id);
         flight.setStatus(status);
         flight.setArrivalTime(arrivalTime);
         airport.updateFlight(flight);
     }
 
-    public void updateFlight(int id, String status, String cancelMotive){
+    public void updateFlightStatus(int id, String status, String cancelMotive){
         Flight flight = getFLightDetails(id);
         flight.setStatus(status);
         flight.setCancellationMotive(cancelMotive);
         airport.updateFlight(flight);
     }
 
-    public void updateFlight(int id, String status, List<String> incidents){
+    public void updateFlightStatus(int id, String status, List<String> incidents){
         Flight flight = getFLightDetails(id);
         flight.setStatus(status);
         flight.setIncidents(incidents);

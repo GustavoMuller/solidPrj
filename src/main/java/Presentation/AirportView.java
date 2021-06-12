@@ -3,6 +3,10 @@ package Presentation;
 import Controler.AirportController;
 import Data.Flight;
 
+import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -15,40 +19,38 @@ public class AirportView {
 
     public void displayMenu() {
         var input = new Scanner(System.in);
+        var option = 1;
+        while(option != 7) {
+            option = readNumber("""
+                                              ****************************************
+                                              =============== AIRPORT ===============
+                                              ****************************************
+                                              Select an option:
+                                              1-Display flights list
+                                              2-Display flight details
+                                              3-Add flight
+                                              4-Add flights from file (xlsx)
+                                              5-Update flight status
+                                              6-Reports
+                                              7-Exit
+                                              ****************************************""", 7);
 
-        while(true) {
-            int option = (int) readNumber("=============== AIRPORT ===============" +
-                    "\n****************************************\nSelect an option:\n" +
-                    "****************************************\n1-Display flights list\n" +
-                    "2-Display flight details\n3-Add flight\n4-Add flights from file (xlsx)\n" +
-                    "5-Update flight status\n6-Reports\n7-Exit\n****************************************\n", 7);
             switch (option) {
-                case 1 -> {
-                    displayFlightsList();
-                }
-                case 2 -> {
-                   displayFlight();
-                }
+                case 1 -> displayFlightsList();
+                case 2 -> displayFlight();
                 case 3 -> {
-                    // Pedir datos del vuelo al usuario y pasarlos al constructor para crear un nuevo Object
-                    // Seran varios datos dado que un vuelo se compone de varias cosas
-                    var flight = new Flight();
+                    var flight = readFlightData();
                     // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
                     controller.addFlight();
                 }
                 case 4 -> {
                     System.out.println("Enter Flights Filename: ");
                     var flightFileURL = input.nextLine().trim();
-                    // Modificar el metodo addFlightsFromFile para que reciba como argumento un String como SRC
-                    controller.addFlightsFromFile();
+                    controller.addFlightsFromFile(flightFileURL);
                 }
-                case 5 -> {
-                    displayFlightStatusMenu();
-                }
-                case 6 -> {
-                   displayReportsMenu();
-                }
-                case 7 -> { System.exit(0); }
+                case 5 -> displayFlightStatusMenu();
+                case 6 -> displayReportsMenu();
+                default -> System.exit(0);
             }
         }
     }
@@ -59,8 +61,6 @@ public class AirportView {
     }
 
     public void displayFlightsList(){
-        controller.getFlightsList();
-        //iterar y mostrar los vuelos en
         var flights = controller.getFlightsList();
 
         if(flights == null || flights.isEmpty())
@@ -80,24 +80,23 @@ public class AirportView {
         int statusOption = readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu", 5);
 
         switch(statusOption) {
-            case 1: // updateFlight("On time")
+            case 1: // controller.updateFlight("On time");
                 break;
             case 2:
-                // pedir nueva fecha y hora de llegada, luego crear un nuevo Date
-                // con esos datos y pasarlo como argumento al metodo updateFlight
-                // updateFlightStatus("Delayed", newArrivalDate);
+                var newArrivalDateTime = readDateTime("Enter the new arrival date and time:");
+                controller.updateFlightStatus(flight, "Delayed", newArrivalDateTime);
                 break;
             case 3:
                 System.out.println("Enter the specific reason why the flight was cancelled: ");
                 String reason = input.nextLine().trim();
-                // updateFlightStatus("Cancelled", reason);
+                controller.updateFlightStatus(flight, "Cancelled", reason);
                 break;
             case 4:
-                System.out.println("Enter the list of flight incidents(if occurred) separated by comma: ");
-                String incidents = input.nextLine();
+                System.out.println("Enter the list of flight incidents(if any) separated by comma: ");
+                String incidents = input.nextLine().trim();
 
                 var incidentsList = Arrays.stream(incidents.trim().split(",")).toList();
-                // updateFlightStatus("Landed", incidentsList);
+                controller.updateFlightStatus(flight, "Landed", incidentsList);
                 break;
             default: break;
         }
@@ -152,5 +151,73 @@ public class AirportView {
 
             System.out.println("Please enter a valid email");
         }
+    }
+
+    private String readText(String prompt, int minLength, int maxLength) {
+        var userInput = new Scanner(System.in);
+        String text;
+
+        while(true) {
+            System.out.println(prompt);
+            text = userInput.nextLine();
+
+            if(text.trim().length() >= minLength && text.trim().length() <= maxLength)
+                return text.trim();
+
+            System.out.println("You must enter between " + minLength + " and " + maxLength + " characters.");
+        }
+    }
+
+    private LocalDate readDate() {
+        var userInput = new Scanner(System.in);
+        final String DATE_REGEX = "(\\d{4})-(\\d{2})-(\\d{2})";
+        String date;
+
+        while(true) {
+            System.out.println("Enter the date with format YYYY-MM-DD HH:MM:SS");
+            date = userInput.nextLine().trim();
+
+            if(date.matches(DATE_REGEX) )
+                return LocalDate.parse(date);
+
+            System.out.println("You must enter a valid date.");
+        }
+    }
+
+    private LocalTime readTime() {
+        var userInput = new Scanner(System.in);
+        final String TIME_REGEX = "(\\d{2})-(\\d{2})-(\\d{2})";
+        String time;
+
+        while(true) {
+            System.out.println("Enter the time with format HH:MM:SS");
+            time = userInput.nextLine().trim();
+
+            if(time.matches(TIME_REGEX) )
+                return LocalTime.parse(time);
+
+            System.out.println("You must enter a valid time.");
+        }
+    }
+
+    private LocalDateTime readDateTime(String prompt) {
+        System.out.println(prompt);
+        var date = readDate();
+        var time = readTime();
+        return LocalDateTime.of(date, time);
+    }
+
+    private Flight readFlightData() {
+        int flightId = readNumber("Enter flight id: ", Integer.MAX_VALUE);
+        String status = "On time";
+        String countryOrigin = readText("Enter country of origin: ", 2, 50);
+        String cityOrigin = readText("Enter city of origin: ", 2, 50);
+        String countryDestination = readText("Enter country of destination: ", 2, 50);
+        String cityDestination = readText("Enter city of destination: ", 2, 50);
+        var departureDateTime = readDateTime("Enter departure information");
+        var arrivalDateTime = readDateTime("Enter arrival information");
+        var airline = readText("Enter Airline name: ", 2, 50);
+
+        return new Flight();
     }
 }

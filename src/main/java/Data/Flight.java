@@ -2,6 +2,7 @@ package Data;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public class Flight {
     private String status;
     private Location origin;
     private Location destination;
-    private Date departureTime;
-    private Date arrivalTime;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
     private String cancellationMotive;
     private List<String> incidents;
     private String airline;
