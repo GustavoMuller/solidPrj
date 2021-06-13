@@ -18,12 +18,14 @@ public class AirportController {
     }
 
     public boolean flightExists(int id){
+        //  QUE PASA SI airport.getFlights() DEVUELVE null???
         for (Flight f : airport.getFlights())
             if (f.getId() == id) return true;
         return false;
     }
 
     public Flight getFlightDetails(int id){
+        //  QUE PASA SI airport.getFlights() DEVUELVE null???
         for (Flight f : airport.getFlights())
             if (f.getId() == id) return f;
         return null;
@@ -43,6 +45,11 @@ public class AirportController {
     }
 
     //Overloaded method to update a flight's status
+    public void updateFlightStatus(int id, String status) {
+        var flight = getFlightDetails(id);
+        flight.setStatus(status);
+        airport.updateFlight(flight);
+    }
     public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);

@@ -3,7 +3,6 @@ package Presentation;
 import Controler.AirportController;
 import Data.Flight;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,11 +39,11 @@ public class AirportView {
                 case 2 -> displayFlight();
                 case 3 -> {
                     var flight = readFlightData();
-                    // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
-                    controller.addFlight();
+                    controller.addFlight(flight);
+                    System.out.println("The flight was added successfully!!!");
                 }
                 case 4 -> {
-                    System.out.println("Enter Flights Filename: ");
+                    System.out.println("Enter Flights' Filename: ");
                     var flightFileURL = input.nextLine().trim();
                     controller.addFlightsFromFile(flightFileURL);
                 }
@@ -56,8 +55,10 @@ public class AirportView {
     }
 
     public void displayFlight() {
-        int flightId = readNumber("Enter flight code/id: ", Integer.MAX_VALUE);
-        System.out.println(controller.getFlightDetails(flightId));
+        int flightId = readNumber("Enter the flight ID:", Integer.MAX_VALUE);
+        if(controller.flightExists(flightId))
+            System.out.println(controller.getFlightDetails(flightId));
+        else System.out.println("There are no flights registered with that ID.");
     }
 
     public void displayFlightsList(){
@@ -70,17 +71,12 @@ public class AirportView {
 
     public void displayFlightStatusMenu() {
         var input = new Scanner(System.in);
-        // Los estados los podriamos manejar como ENUMS para referenciarlos
-        // FlightStatuses.ON_TIME
-        // FlightStatuses.DELAYED
-        // FlightStatuses.CANCELLED
-        // FlightStatuses.LANDED
-
         int flight = readNumber("Enter flight code/id: ", Integer.MAX_VALUE);
         int statusOption = readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu", 5);
 
         switch(statusOption) {
-            case 1: // controller.updateFlight("On time");
+            case 1:
+                controller.updateFlightStatus(flight, "On time");
                 break;
             case 2:
                 var newArrivalDateTime = readDateTime("Enter the new arrival date and time:");
@@ -106,13 +102,13 @@ public class AirportView {
     public void displayReportsMenu() {
         var email = readEmail("Enter the report destination email: ");
 
-        int reportsOption = readNumber("Select an option:\n1-Generate and send flight report\n2-Generate and send flights by date report\n3-Cancel", 3);
+        int reportsOption = readNumber("Select an option:\n1-Generate and send flight's report\n2-Generate and send flights' report by date\n3-Cancel", 3);
 
         if(reportsOption == 1) {
             int flight = readNumber("Enter flight id: ", Integer.MAX_VALUE);
             // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
         } else if(reportsOption == 2) {
-            // Pedir fecha al usuario y generar un nuevo Date Object
+            var filterDateTime = readDateTime("Enter the date and time information to generate the report:");
             // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
         }
     }
@@ -208,7 +204,7 @@ public class AirportView {
     }
 
     private Flight readFlightData() {
-        int flightId = readNumber("Enter flight id: ", Integer.MAX_VALUE);
+        int flightId = verifyFlightId();
         String status = "On time";
         String countryOrigin = readText("Enter country of origin: ", 2, 50);
         String cityOrigin = readText("Enter city of origin: ", 2, 50);
@@ -218,6 +214,24 @@ public class AirportView {
         var arrivalDateTime = readDateTime("Enter arrival information");
         var airline = readText("Enter Airline name: ", 2, 50);
 
+        // TAMBIEN TENGO QUE PEDIR LOS DATOS DEL Aircraft (model, passengerCapacity, range) ????
+        // PARA PODER INSTANCIAR EL Aircraft Y PASARLO AL CONSTRUCTOR DEL Flight
         return new Flight();
+    }
+
+    private int verifyFlightId() {
+        var userInput = new Scanner(System.in);
+        final var NUMBER_REGEX = "[0-9]+";
+        String input;
+
+        while(true) {
+            System.out.println("Enter flight's ID: ");
+            input = userInput.nextLine();
+
+            if(input.matches(NUMBER_REGEX) && Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= Integer.MAX_VALUE) {
+                if(!controller.flightExists(Integer.parseInt(input))) return Integer.parseInt(input);
+                else System.out.println("The flight id already exists, try another one:");
+            }else System.out.println("You must enter a valid flight ID.");
+        }
     }
 }
