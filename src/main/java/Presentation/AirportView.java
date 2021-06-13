@@ -57,7 +57,7 @@ public class AirportView {
 
     public void displayFlight() {
         int flightId = readNumber("Enter flight code/id: ", Integer.MAX_VALUE);
-        System.out.println(controller.getFLightDetails(flightId));
+        System.out.println(controller.getFlightDetails(flightId));
     }
 
     public void displayFlightsList(){
