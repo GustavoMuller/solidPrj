@@ -1,14 +1,15 @@
-package Controler;
+package controller;
 
-import Data.Airport;
-import Data.Flight;
+import data.Airport;
+import data.Flight;
+import data.Report;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AirportController {
     private Airport airport;
+    private Report report;
 
     public AirportController(){
         airport = new Airport();
@@ -40,7 +41,7 @@ public class AirportController {
     }
 
     //Overloaded method to update a flight's status
-    public void updateFlight(int id, String status, Date arrivalTime){
+    public void updateFlight(int id, String status, LocalDate arrivalTime){
         Flight flight = getFLightDetails(id);
         flight.setStatus(status);
         flight.setArrivalTime(arrivalTime);
@@ -61,11 +62,13 @@ public class AirportController {
         airport.updateFlight(flight);
     }
 
-    public void createAircraftReport(){
-
+    public void createAircraftReport(int aircraftId){
+        report = new Report();
+        report.createReport(airport, aircraftId, java.time.LocalDate.now().toString());
     }
 
-    public void createFlightReport(){
-
+    public void createFlightReport(LocalDate date){
+        report = new Report();
+        report.createReport(airport, date, java.time.LocalDate.now().toString());
     }
 }

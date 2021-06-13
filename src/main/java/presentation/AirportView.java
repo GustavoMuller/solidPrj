@@ -1,20 +1,22 @@
-package Presentation;
+package presentation;
 
-import Controler.AirportController;
-import Data.Flight;
+import controller.AirportController;
+import data.Flight;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Scanner;
 
 public class AirportView {
-    private AirportController controller;
+    private final AirportController controller;
+    private final Scanner input = new Scanner(System.in);
 
     public AirportView(){
         controller = new AirportController();
     }
 
     public void displayMenu() {
-        var input = new Scanner(System.in);
 
         while(true) {
             int option = (int) readNumber("=============== AIRPORT ===============" +
@@ -40,7 +42,7 @@ public class AirportView {
                     System.out.println("Enter Flights Filename: ");
                     var flightFileURL = input.nextLine().trim();
                     // Modificar el metodo addFlightsFromFile para que reciba como argumento un String como SRC
-                    controller.addFlightsFromFile();
+                    controller.addFlightsFromFile("fileNameHere");
                 }
                 case 5 -> {
                     displayFlightStatusMenu();
@@ -105,16 +107,20 @@ public class AirportView {
     }
 
     public void displayReportsMenu() {
+        LocalDate flightDate;
         var email = readEmail("Enter the report destination email: ");
 
         int reportsOption = readNumber("Select an option:\n1-Generate and send flight report\n2-Generate and send flights by date report\n3-Cancel", 3);
 
         if(reportsOption == 1) {
-            int flight = readNumber("Enter flight id: ", Integer.MAX_VALUE);
-            // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
+            int flightId = readNumber("Enter flight id: ", Integer.MAX_VALUE);
+            controller.createAircraftReport(flightId);
+            // Invocar metodo de la clase que  envie el reporte en base a email y flightId
         } else if(reportsOption == 2) {
-            // Pedir fecha al usuario y generar un nuevo Date Object
-            // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
+            System.out.println("Enter date. Ex: 2021 02 01");
+            flightDate = LocalDate.of(input.nextInt(), input.nextInt(), input.nextInt());
+            controller.createFlightReport(flightDate);
+            // Invocar metodo de la clase que envie el reporte en base a email y flightDate
         }
     }
 
