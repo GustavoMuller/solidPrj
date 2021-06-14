@@ -1,9 +1,8 @@
-package Presentation;
+package presentation;
 
-import Controler.AirportController;
-import Data.Flight;
+import controller.AirportController;
+import data.Flight;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,7 +40,7 @@ public class AirportView {
                 case 3 -> {
                     var flight = readFlightData();
                     // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
-                    controller.addFlight();
+                    controller.addFlight(flight);
                 }
                 case 4 -> {
                     System.out.println("Enter Flights Filename: ");

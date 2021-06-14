@@ -1,14 +1,15 @@
-package Controler;
+package controller;
 
-import Data.Aircraft;
-import Data.Airport;
-import Data.Flight;
+import data.Aircraft;
+import data.Airport;
+import data.Flight;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AirportController {
-    private Airport airport;
+    private final Airport airport;
 
     public AirportController(){
         airport = new Airport();
@@ -23,8 +24,9 @@ public class AirportController {
     }
 
     public boolean flightExists(int id){
-        for (Flight f : airport.getFlights())
-            if (f.getId() == id) return true;
+        if (hasFlights())
+            for (Flight f : airport.getFlights())
+                if (f.getId() == id) return true;
         return false;
     }
 
@@ -32,6 +34,14 @@ public class AirportController {
         for (Flight f : airport.getFlights())
             if (f.getId() == id) return f;
         return null;
+    }
+
+    public List<Flight> getFlightDetails(LocalDateTime date){
+        ArrayList<Flight> flights = new ArrayList<>();
+        if (hasFlights())
+            for (Flight f : airport.getFlights())
+                if (f.getArrivalTime().toLocalDate() == date.toLocalDate()) flights.add(f);
+        return flights;
     }
 
     public List<Flight> getFlightsList(){
@@ -48,21 +58,21 @@ public class AirportController {
     }
 
     //Overloaded method to update a flight's status
-    public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){
+    public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){ //DELAYED, ON TIME
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setArrivalTime(arrivalTime);
         airport.updateFlight(flight);
     }
 
-    public void updateFlightStatus(int id, String status, String cancelMotive){
+    public void updateFlightStatus(int id, String status, String cancelMotive){ //CANCELED
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setCancellationMotive(cancelMotive);
         airport.updateFlight(flight);
     }
 
-    public void updateFlightStatus(int id, String status, List<String> incidents){
+    public void updateFlightStatus(int id, String status, List<String> incidents){ //LANDED
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setIncidents(incidents);
