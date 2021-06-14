@@ -1,8 +1,13 @@
-package Presentation;
+package presentation;
 
+<<<<<<< HEAD:src/main/java/Presentation/AirportView.java
 import Controler.AirportController;
 import Data.Aircraft;
 import Data.Flight;
+=======
+import controller.AirportController;
+import data.Flight;
+>>>>>>> master:src/main/java/presentation/AirportView.java
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,8 +45,13 @@ public class AirportView {
                 case 2 -> displayFlight();
                 case 3 -> {
                     var flight = readFlightData();
+<<<<<<< HEAD:src/main/java/Presentation/AirportView.java
                     controller.addFlight(flight);
                     System.out.println("The flight was added successfully!!!");
+=======
+                    // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
+                    controller.addFlight(flight);
+>>>>>>> master:src/main/java/presentation/AirportView.java
                 }
                 case 4 -> {
                     System.out.println("Enter Flights' Filename: ");
