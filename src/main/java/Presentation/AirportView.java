@@ -1,6 +1,7 @@
 package Presentation;
 
 import Controler.AirportController;
+import Data.Aircraft;
 import Data.Flight;
 
 import java.time.LocalDate;
@@ -170,7 +171,7 @@ public class AirportView {
         String date;
 
         while(true) {
-            System.out.println("Enter the date with format YYYY-MM-DD HH:MM:SS");
+            System.out.println("Enter the date with format YYYY-MM-DD");
             date = userInput.nextLine().trim();
 
             if(date.matches(DATE_REGEX) )
@@ -213,6 +214,11 @@ public class AirportView {
         var departureDateTime = readDateTime("Enter departure information");
         var arrivalDateTime = readDateTime("Enter arrival information");
         var airline = readText("Enter Airline name: ", 2, 50);
+        var aircraftModel = readText("Enter the aircraft model: ", 2, 20);
+        var aircraftRange = readNumber("Enter the maximum range with full tanks (in Km): ", 17000);
+        var aircraftPassengerCapacity = readNumber("Enter the passengers maximum capacity: ", 900);
+        var aircraft = new Aircraft(aircraftModel, aircraftPassengerCapacity, aircraftRange);
+        // controller.addAircraft(aircraft);
 
         // TAMBIEN TENGO QUE PEDIR LOS DATOS DEL Aircraft (model, passengerCapacity, range) ????
         // PARA PODER INSTANCIAR EL Aircraft Y PASARLO AL CONSTRUCTOR DEL Flight
