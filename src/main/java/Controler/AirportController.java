@@ -1,5 +1,6 @@
 package Controler;
 
+import Data.Aircraft;
 import Data.Airport;
 import Data.Flight;
 
@@ -11,6 +12,10 @@ public class AirportController {
 
     public AirportController(){
         airport = new Airport();
+    }
+
+    public void addAircraft(Aircraft a){
+        airport.addAircraft(a);
     }
 
     public boolean hasFlights(){

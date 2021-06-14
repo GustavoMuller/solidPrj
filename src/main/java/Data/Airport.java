@@ -11,6 +11,11 @@ public class Airport {
     private List<Aircraft> aircraftCatalog;
     private String localWeather;
 
+    public void addAircraft(Aircraft a){
+        if (aircraftCatalog == null) aircraftCatalog = new ArrayList<>();
+        aircraftCatalog.add(a);
+    }
+
     public void addFlight(Flight flight){
         if (flights == null) flights = new ArrayList<>();
         flights.add(flight);
