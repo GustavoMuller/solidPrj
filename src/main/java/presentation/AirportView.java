@@ -40,9 +40,9 @@ public class AirportView {
                 }
                 case 4 -> {
                     System.out.println("Enter Flights Filename: ");
-                    var flightFileURL = input.nextLine().trim();
+                    var fileName = input.nextLine().trim();
                     // Modificar el metodo addFlightsFromFile para que reciba como argumento un String como SRC
-                    controller.addFlightsFromFile("fileNameHere");
+                    controller.addFlightsFromFile(fileName);
                 }
                 case 5 -> {
                     displayFlightStatusMenu();
@@ -114,12 +114,16 @@ public class AirportView {
 
         if(reportsOption == 1) {
             int flightId = readNumber("Enter flight id: ", Integer.MAX_VALUE);
-            controller.createAircraftReport(flightId);
+            System.out.println("Enter file name");
+            String fileName = input.next();
+            controller.createAircraftReport(flightId, fileName);
             // Invocar metodo de la clase que  envie el reporte en base a email y flightId
         } else if(reportsOption == 2) {
             System.out.println("Enter date. Ex: 2021 02 01");
             flightDate = LocalDate.of(input.nextInt(), input.nextInt(), input.nextInt());
-            controller.createFlightReport(flightDate);
+            System.out.println("Enter file name");
+            String fileName = input.next();
+            controller.createFlightReport(flightDate, fileName);
             // Invocar metodo de la clase que envie el reporte en base a email y flightDate
         }
     }

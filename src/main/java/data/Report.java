@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Report {
 
@@ -37,47 +40,59 @@ public class Report {
 
     /* Read report and add flights to file */
     /* Currently only prints the info on file, waiting on a method to create a flight object */
-    public void readReport(String name) {
-        var sb = new StringBuilder();
+    public List<Flight> readFile(String name) {
+        DataFormatter format = new DataFormatter();
+        Flight flight;
+        ArrayList<Flight> flightList = new ArrayList<>();
+        var i = 1;
         try (var workbook = WorkbookFactory.create(new File("src/main/resources/" + name + ".xlsx"))) {
             var sheet = workbook.getSheetAt(0);
-            for (Row r : sheet) {
-                for (Cell c : r) {
-                    if (c != null) {
-                        sb.append(c).append(" ");
-                    }
-                }
-                System.out.println(sb);
-                sb = new StringBuilder();
+
+            while (sheet.getRow(i) != null) {
+                var row = sheet.getRow(i);
+                flight = new Flight();
+                flight.setId((int)row.getCell(0).getNumericCellValue());
+                flight.setAirline(row.getCell(1).toString());
+                flight.setAircraft(new Aircraft(row.getCell(2).toString(), 1000, 100f));
+                flight.setStatus(row.getCell(3).toString());
+                flight.setOrigin(new Location(row.getCell(4).toString(), row.getCell(4).toString()));
+                flight.setDestination(new Location(row.getCell(5).toString(), row.getCell(5).toString()));
+                flight.setDepartureTime(LocalDate.now());   // Work in progress cell 6
+                flight.setArrivalTime(LocalDate.now());     // Work in progress cell 7
+                flight.setCancellationMotive(row.getCell(8).toString());
+                flight.setIncidents(new ArrayList<>(Arrays.asList(row.getCell(9).toString())));
+                i++;
+                flightList.add(flight);
             }
+            return flightList;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return Collections.emptyList();
     }
 
     /* Add Flight to the report */
-    public void addToReport(Flight flight, String name) {
-
+    public void addToReport(Flight flight, String fileName) {
         try {
-            var file = new File("src/main/resources/" + name + ".xlsx");
+            var file = new File("src/main/resources/" + fileName + ".xlsx");
             if (!(file.exists())) {
-                createFile(name);
+                createFile(fileName);
             }
             var workbook = WorkbookFactory.create(file);
             var sheet = workbook.getSheetAt(0);
-            var r = sheet.createRow(sheet.getLastRowNum() + 1);
-            r.createCell(0).setCellValue(flight.getId());
-            r.createCell(1).setCellValue(flight.getAirline());
-            r.createCell(2).setCellValue(flight.getAircraft().getModel());
-            r.createCell(3).setCellValue(flight.getStatus());
-            r.createCell(4).setCellValue(flight.getOrigin().getCity());
-            r.createCell(5).setCellValue(flight.getDestination().getCity());
-            r.createCell(6).setCellValue(flight.getDepartureTime());
-            r.createCell(7).setCellValue(flight.getArrivalTime());
-            r.createCell(8).setCellValue(flight.getCancellationMotive());
-//            r.createCell(9).setCellValue(flight.getIncidents());  /* Work in progress */
+            var row = sheet.createRow(sheet.getLastRowNum() + 1);
+            row.createCell(0).setCellValue(flight.getId());
+            row.createCell(1).setCellValue(flight.getAirline());
+            row.createCell(2).setCellValue(flight.getAircraft().getModel());
+            row.createCell(3).setCellValue(flight.getStatus());
+            row.createCell(4).setCellValue(flight.getOrigin().getCity());
+            row.createCell(5).setCellValue(flight.getDestination().getCity());
+            row.createCell(6).setCellValue(flight.getDepartureTime());
+            row.createCell(7).setCellValue(flight.getArrivalTime());
+            row.createCell(8).setCellValue(flight.getCancellationMotive());
+//            row.createCell(9).setCellValue(flight.getIncidents());  /* Work in progress */
 
-            var fileOut = new FileOutputStream(name + ".xlsx");
+            var fileOut = new FileOutputStream(fileName + ".xlsx");
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();
@@ -87,25 +102,4 @@ public class Report {
 
     }
 
-    /* Create a report based on an aircraft ID */
-    public void createReport(Airport airport, int aircraftId, String fileName) {
-        if (airport.getFlights() != null) {
-            for (Flight f: airport.getFlights()) {
-                if (f.getId() == (aircraftId)) {
-                    addToReport(f, fileName);
-                }
-            }
-        }
-    }
-
-    /* Create a report based on a date */
-    public void createReport(Airport airport, LocalDate date, String fileName) {
-        if (airport.getFlights() != null) {
-            for (Flight f: airport.getFlights()) {
-                if (f.getDepartureTime() == (date)) {
-                    addToReport(f, fileName);
-                }
-            }
-        }
-    }
 }

@@ -21,6 +21,12 @@ public class AirportController {
         return null;
     }
 
+    public Flight getFLightDetails(LocalDate date){
+        for (Flight f : airport.getFlights())
+            if (f.getDepartureTime() == date) return f;
+        return null;
+    }
+
     public List<Flight> getFlightsList(){
         return airport.getFlights();
     }
@@ -30,14 +36,13 @@ public class AirportController {
         //Create new obj and pass it to airport.addFlight()
     }
 
+    //Read file and iterate the records
+    //Create new Flight obj for each record and pass it to airport.addFlight()
     public void addFlightsFromFile(String fileName){
-        //Read file and iterate the records
-        //Create new Flight obj for each record and pass it to airport.addFlight()
-        /*
-        Report fileReader = new Report();
-        for (Flight f : fileReader.readFile(fileName)) {
+        report = new Report();
+        for (Flight f : report.readFile(fileName)) {
             airport.addFlight(f);
-        }*/
+        }
     }
 
     //Overloaded method to update a flight's status
@@ -62,13 +67,15 @@ public class AirportController {
         airport.updateFlight(flight);
     }
 
-    public void createAircraftReport(int aircraftId){
+    public void createAircraftReport(int id, String fileName){
+        Flight flight = getFLightDetails(id);
         report = new Report();
-        report.createReport(airport, aircraftId, java.time.LocalDate.now().toString());
+        report.addToReport(flight, fileName);
     }
 
-    public void createFlightReport(LocalDate date){
+    public void createFlightReport(LocalDate date, String fileName){
+        Flight flight = getFLightDetails(date);
         report = new Report();
-        report.createReport(airport, date, java.time.LocalDate.now().toString());
+        report.addToReport(flight, fileName);
     }
 }
