@@ -3,6 +3,7 @@ package controller;
 import data.Aircraft;
 import data.Airport;
 import data.Flight;
+import data.Location;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class AirportController {
     private final Airport airport;
 
     public AirportController(){
-        airport = new Airport();
+        airport = new Airport( new Location("El Salvador", "San Salvador"));
     }
 
     public void addAircraft(Aircraft a){
@@ -46,6 +47,10 @@ public class AirportController {
 
     public List<Flight> getFlightsList(){
         return airport.getFlights();
+    }
+
+    public Location getAirportLocation() {
+        return airport.getLocation();
     }
 
     public void addFlight(Flight f){

@@ -1,13 +1,9 @@
 package presentation;
 
-<<<<<<< HEAD:src/main/java/Presentation/AirportView.java
-import Controler.AirportController;
-import Data.Aircraft;
-import Data.Flight;
-=======
 import controller.AirportController;
+import data.Aircraft;
 import data.Flight;
->>>>>>> master:src/main/java/presentation/AirportView.java
+import data.Location;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +12,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class AirportView {
-    private AirportController controller;
+    private final AirportController controller;
 
     public AirportView(){
         controller = new AirportController();
@@ -24,8 +20,9 @@ public class AirportView {
 
     public void displayMenu() {
         var input = new Scanner(System.in);
-        var option = 1;
-        while(option != 7) {
+        int option;
+
+        do {
             option = readNumber("""
                                               ****************************************
                                               =============== AIRPORT ===============
@@ -45,13 +42,8 @@ public class AirportView {
                 case 2 -> displayFlight();
                 case 3 -> {
                     var flight = readFlightData();
-<<<<<<< HEAD:src/main/java/Presentation/AirportView.java
                     controller.addFlight(flight);
                     System.out.println("The flight was added successfully!!!");
-=======
-                    // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
-                    controller.addFlight(flight);
->>>>>>> master:src/main/java/presentation/AirportView.java
                 }
                 case 4 -> {
                     System.out.println("Enter Flights' Filename: ");
@@ -60,9 +52,10 @@ public class AirportView {
                 }
                 case 5 -> displayFlightStatusMenu();
                 case 6 -> displayReportsMenu();
-                default -> System.exit(0);
+                default -> System.out.println("Come back soon!");
             }
-        }
+
+        } while(option != 7);
     }
 
     public void displayFlight() {
@@ -77,7 +70,7 @@ public class AirportView {
 
         if(flights == null || flights.isEmpty())
             System.out.println("There are no registered flights at the moment");
-        else flights.stream().forEach(System.out::print);
+        else flights.forEach(System.out::print);
     }
 
     public void displayFlightStatusMenu() {
@@ -87,7 +80,8 @@ public class AirportView {
 
         switch(statusOption) {
             case 1:
-                controller.updateFlightStatus(flight, "On time");
+                var newDateTime = readDateTime("Enter the new arrival date and time:");
+                controller.updateFlightStatus(flight, "On time", newDateTime);
                 break;
             case 2:
                 var newArrivalDateTime = readDateTime("Enter the new arrival date and time:");
@@ -111,7 +105,7 @@ public class AirportView {
     }
 
     public void displayReportsMenu() {
-        var email = readEmail("Enter the report destination email: ");
+        var email = readEmail();
 
         int reportsOption = readNumber("Select an option:\n1-Generate and send flight's report\n2-Generate and send flights' report by date\n3-Cancel", 3);
 
@@ -140,17 +134,13 @@ public class AirportView {
         }
     }
 
-    private String readEmail(String prompt) {
+    private String readEmail() {
         String input;
         var userInput = new Scanner(System.in);
-        final String EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
-                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])" +
-                "*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]" +
-                "?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:" +
-                "[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        final String EMAIL_REGEX = "^[^@\\s]+@[^@\\s\\.]+\\.[^@\\.\\s]+$";
 
         while(true) {
-            System.out.println(prompt);
+            System.out.println("Enter report's destination email: ");
             input = userInput.nextLine();
 
             if(input.matches(EMAIL_REGEX))
@@ -215,24 +205,24 @@ public class AirportView {
     }
 
     private Flight readFlightData() {
-        int flightId = verifyFlightId();
-        String status = "On time";
-        String countryOrigin = readText("Enter country of origin: ", 2, 50);
-        String cityOrigin = readText("Enter city of origin: ", 2, 50);
-        String countryDestination = readText("Enter country of destination: ", 2, 50);
-        String cityDestination = readText("Enter city of destination: ", 2, 50);
+        var flightId = verifyFlightId();
+        var status = "On time";
+        var countryOrigin = readText("Enter country of origin: ", 2, 50);
+        var cityOrigin = readText("Enter city of origin: ", 2, 50);
+        var countryDestination = readText("Enter country of destination: ", 2, 50);
+        var cityDestination = readText("Enter city of destination: ", 2, 50);
+        var origin = new Location(countryOrigin, cityOrigin);
+        var destination = new Location(countryDestination, cityDestination);
         var departureDateTime = readDateTime("Enter departure information");
         var arrivalDateTime = readDateTime("Enter arrival information");
         var airline = readText("Enter Airline name: ", 2, 50);
         var aircraftModel = readText("Enter the aircraft model: ", 2, 20);
         var aircraftRange = readNumber("Enter the maximum range with full tanks (in Km): ", 17000);
         var aircraftPassengerCapacity = readNumber("Enter the passengers maximum capacity: ", 900);
+        var isArrival = destination.equals(controller.getAirportLocation());
         var aircraft = new Aircraft(aircraftModel, aircraftPassengerCapacity, aircraftRange);
-        // controller.addAircraft(aircraft);
-
-        // TAMBIEN TENGO QUE PEDIR LOS DATOS DEL Aircraft (model, passengerCapacity, range) ????
-        // PARA PODER INSTANCIAR EL Aircraft Y PASARLO AL CONSTRUCTOR DEL Flight
-        return new Flight();
+        controller.addAircraft(aircraft);
+        return new Flight(flightId, status, origin, destination, departureDateTime, arrivalDateTime, airline, aircraft, isArrival);
     }
 
     private int verifyFlightId() {
