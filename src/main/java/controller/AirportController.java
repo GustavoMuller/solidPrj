@@ -3,13 +3,14 @@ package controller;
 import data.Aircraft;
 import data.Airport;
 import data.Flight;
+import data.Report;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AirportController {
     private final Airport airport;
+    private Report report;
 
     public AirportController(){
         airport = new Airport();
@@ -36,12 +37,10 @@ public class AirportController {
         return null;
     }
 
-    public List<Flight> getFlightDetails(LocalDateTime date){
-        ArrayList<Flight> flights = new ArrayList<>();
-        if (hasFlights())
-            for (Flight f : airport.getFlights())
-                if (f.getArrivalTime().toLocalDate() == date.toLocalDate()) flights.add(f);
-        return flights;
+    public Flight getFlightDetails(LocalDateTime date) {
+        for (Flight f : airport.getFlights())
+            if (f.getArrivalTime().toLocalDate() == date.toLocalDate()) return f;
+        return null;
     }
 
     public List<Flight> getFlightsList(){
@@ -79,11 +78,15 @@ public class AirportController {
         airport.updateFlight(flight);
     }
 
-    public void createAircraftReport(){
-
+    public void createAircraftReport(int id, String fileName){
+        Flight flight = getFlightDetails(id);
+        report = new Report();
+        report.addToReport(flight, fileName);
     }
 
-    public void createFlightReport(){
-
+    public void createFlightReport(LocalDateTime date, String fileName){
+        Flight flight = getFlightDetails(date);
+        report = new Report();
+        report.addToReport(flight, fileName);
     }
 }

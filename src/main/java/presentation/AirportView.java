@@ -6,6 +6,7 @@ import data.Flight;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -38,9 +39,9 @@ public class AirportView {
                 case 1 -> displayFlightsList();
                 case 2 -> displayFlight();
                 case 3 -> {
-                    var flight = readFlightData();
+//                    var flight = readFlightData();
                     // Falta modficar el metodo addFlight para que reciba un Object Flight como argumento
-                    controller.addFlight(flight);
+//                    controller.addFlight(flight);
                 }
                 case 4 -> {
                     System.out.println("Enter Flights Filename: ");
@@ -109,8 +110,10 @@ public class AirportView {
 
         if(reportsOption == 1) {
             int flight = readNumber("Enter flight id: ", Integer.MAX_VALUE);
+            controller.createAircraftReport(flight, "test");
             // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
         } else if(reportsOption == 2) {
+            controller.createFlightReport(LocalDateTime.of(2020, 1, 2, 20, 10), "test2");
             // Pedir fecha al usuario y generar un nuevo Date Object
             // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
         }
