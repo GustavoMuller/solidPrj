@@ -123,11 +123,13 @@ public class AirportView {
                if(!controller.flightExists(flight)) {
                    System.out.println("There are no flights registered with that ID");
                    continue;}
-               // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
+               controller.createAircraftReport(flight, "Report by ID " + flight);
+               controller.sendEmail(email, "Report by ID " + flight);
                System.out.println("The report of the flight " + flight + " was sent to " + email + " successfully!!!");
            } else if(reportsOption == 2) {
                var filterDate = readDate();
-               // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
+               controller.createFlightReport(filterDate, "Report by Date " + LocalDate.now());
+               controller.sendEmail(email, "Report by Date " + LocalDate.now());
                System.out.println("The report of the flights registered on " + filterDate + " was sent to " + email + " successfully!!!");
            }
        } while(reportsOption != 3);

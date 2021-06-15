@@ -39,7 +39,7 @@ public class Flight {
         var output = "| ID: " + id + " | Status: " + status + " | Origin : " + origin.getCountry() + ", " +
                 origin.getCity() + " | Destination: " + destination.getCountry() + ", " + destination.getCity() +
                 " | Departure: " + departureTime.toLocalDate() + " " + departureTime.toLocalTime() + " | Arrival: " +
-                arrivalTime.toLocalDate() + " " + arrivalTime.toLocalTime() + " | Airline: " + airline + " | isArrival: " + isArrival;
+                arrivalTime.toLocalDate() + " " + arrivalTime.toLocalTime() + " | Airline: " + airline + " | Type: " + (isArrival() ? "Arrival" : "Departure") ;
 
         if(status.equals("Cancelled")) output += " | Cancellation motive: " + cancellationMotive;
 
