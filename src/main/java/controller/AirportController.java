@@ -93,7 +93,7 @@ public class AirportController {
             System.out.println("There are no flights with the ID entered");
         } else {
             report = new Report();
-            report.addToReport(flight, fileName);
+            report.addToReport(flight, fileName, airport.getLocalWeather());
         }
     }
 
@@ -102,9 +102,9 @@ public class AirportController {
         if (flightList == null) {
             System.out.println("There are no flights with the date entered");
         } else {
+            report = new Report();
             for (Flight f : flightList) {
-                report = new Report();
-                report.addToReport(f, fileName);
+                report.addToReport(f, fileName, airport.getLocalWeather());
             }
         }
     }

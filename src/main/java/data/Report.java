@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class Report {
 
     /* Create a new excel file with the current date */
-    public void createFile(String name) {
+    public void createFile(String name, String weather) {
         try (Workbook workbook = new XSSFWorkbook()) {
             var sheet = workbook.createSheet("Flights " + java.time.LocalDate.now());
             var row = sheet.createRow(0);
             row.createCell(0).setCellValue("WEATHER");
-            row.createCell(1).setCellValue("AQUI VA EL CLIMA");
+            row.createCell(1).setCellValue(weather);
             row = sheet.createRow(1);
             row.createCell(0).setCellValue("ID");
             row.createCell(1).setCellValue("Airline");
@@ -85,11 +85,11 @@ public class Report {
     }
 
     /* Add Flight to the report */
-    public void addToReport(Flight flight, String fileName) {
+    public void addToReport(Flight flight, String fileName, String weather) {
         try {
             var file = new File("src/main/resources/" + fileName + ".xlsx");
             if (!file.exists()) {
-                createFile(fileName);
+                createFile(fileName, weather);
             }
             var workbook = WorkbookFactory.create(file);
             var sheet = workbook.getSheetAt(0);

@@ -16,6 +16,7 @@ public class Airport {
 
     public Airport(Location location) {
         this.location = location;
+        this.localWeather = Weather.getLocalWeather(this.location.getCity());
     }
 
     public void addAircraft(Aircraft a){
