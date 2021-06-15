@@ -36,14 +36,14 @@ public class Flight {
 
     @Override
     public String toString() {
-        var output = "\n| id: " + id + " | status: " + status + " | origin : " + origin.getCountry() + ", " +
-                origin.getCity() + " | destination: " + destination.getCountry() + ", " +
-                destination.getCity() + " | departure: " + departureTime + " | arrival: " + arrivalTime +
-                " | airline: " + airline + " | isArrival: " + isArrival;
+        var output = "| ID: " + id + " | Status: " + status + " | Origin : " + origin.getCountry() + ", " +
+                origin.getCity() + " | Destination: " + destination.getCountry() + ", " + destination.getCity() +
+                " | Departure: " + departureTime.toLocalDate() + " " + departureTime.toLocalTime() + " | Arrival: " +
+                arrivalTime.toLocalDate() + " " + arrivalTime.toLocalTime() + " | Airline: " + airline + " | isArrival: " + isArrival;
 
-        if(status.equals("Cancelled")) output += " | cancellation motive: " + cancellationMotive;
+        if(status.equals("Cancelled")) output += " | Cancellation motive: " + cancellationMotive;
 
-        return output;
+        return output + "\n";
 
     }
 }

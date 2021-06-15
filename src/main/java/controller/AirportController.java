@@ -21,7 +21,7 @@ public class AirportController {
     }
 
     public boolean hasFlights(){
-        return !airport.getFlights().isEmpty();
+        return !(airport.getFlights() == null || airport.getFlights().isEmpty());
     }
 
     public boolean flightExists(int id){

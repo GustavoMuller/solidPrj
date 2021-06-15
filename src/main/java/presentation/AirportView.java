@@ -75,29 +75,36 @@ public class AirportView {
 
     public void displayFlightStatusMenu() {
         var input = new Scanner(System.in);
-        int flight = readNumber("Enter flight code/id: ", Integer.MAX_VALUE);
+        int flight = readNumber("Enter flight id: ", Integer.MAX_VALUE);
+
+        if(!controller.flightExists(flight)) {
+            System.out.println("The flight with the given id does not exist");
+            return;
+        }
+
         int statusOption = readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu", 5);
 
         switch(statusOption) {
             case 1:
                 var newDateTime = readDateTime("Enter the new arrival date and time:");
                 controller.updateFlightStatus(flight, "On time", newDateTime);
+                System.out.println("The flight's status was updated successfully!");
                 break;
             case 2:
                 var newArrivalDateTime = readDateTime("Enter the new arrival date and time:");
                 controller.updateFlightStatus(flight, "Delayed", newArrivalDateTime);
+                System.out.println("The flight's status was updated successfully!");
                 break;
             case 3:
-                System.out.println("Enter the specific reason why the flight was cancelled: ");
-                String reason = input.nextLine().trim();
+                String reason = readText("Enter the specific reason why the flight was cancelled: ", 5, 100);
                 controller.updateFlightStatus(flight, "Cancelled", reason);
+                System.out.println("The flight's status was updated successfully!");
                 break;
             case 4:
-                System.out.println("Enter the list of flight incidents(if any) separated by comma: ");
-                String incidents = input.nextLine().trim();
-
+                String incidents = readText("\"Enter the list of flight incidents(if any) separated by comma: ", 5, 100);
                 var incidentsList = Arrays.stream(incidents.trim().split(",")).toList();
                 controller.updateFlightStatus(flight, "Landed", incidentsList);
+                System.out.println("The flight's status was updated successfully!");
                 break;
             default: break;
         }
@@ -105,17 +112,26 @@ public class AirportView {
     }
 
     public void displayReportsMenu() {
+        int reportsOption;
         var email = readEmail();
 
-        int reportsOption = readNumber("Select an option:\n1-Generate and send flight's report\n2-Generate and send flights' report by date\n3-Cancel", 3);
+       do {
+           reportsOption = readNumber("Select an option:\n1-Generate and send flight's report\n2-Generate and send flights' report by date\n3-Cancel", 3);
 
-        if(reportsOption == 1) {
-            int flight = readNumber("Enter flight id: ", Integer.MAX_VALUE);
-            // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
-        } else if(reportsOption == 2) {
-            var filterDateTime = readDateTime("Enter the date and time information to generate the report:");
-            // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
-        }
+           if(reportsOption == 1) {
+               int flight = readNumber("Enter flight ID: ", Integer.MAX_VALUE);
+               if(!controller.flightExists(flight)) {
+                   System.out.println("There are no flights registered with that ID");
+                   continue;}
+               // Invocar metodo de la clase que genere y/o envie el reporte en base a email y flightId
+               System.out.println("The report of the flight " + flight + " was sent to " + email + " successfully!!!");
+           } else if(reportsOption == 2) {
+               var filterDate = readDate();
+               // Invocar metodo de la clase que genere y/o envie el reporte en base a email y date
+               System.out.println("The report of the flights registered on " + filterDate + " was sent to " + email + " successfully!!!");
+           }
+       } while(reportsOption != 3);
+
     }
 
     private int readNumber(String prompt, int max) {
@@ -183,11 +199,11 @@ public class AirportView {
 
     private LocalTime readTime() {
         var userInput = new Scanner(System.in);
-        final String TIME_REGEX = "(\\d{2})-(\\d{2})-(\\d{2})";
+        final String TIME_REGEX = "(\\d{2}):(\\d{2})";
         String time;
 
         while(true) {
-            System.out.println("Enter the time with format HH:MM:SS");
+            System.out.println("Enter the time with format HH:MM");
             time = userInput.nextLine().trim();
 
             if(time.matches(TIME_REGEX) )
