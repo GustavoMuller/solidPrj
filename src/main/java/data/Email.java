@@ -11,8 +11,8 @@ import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
 public class Email {
-    private String fromEmail = "EMAIL";
-    private String password = "PASSWORD";
+    private final String fromEmail = "java.kodigo@gmail.com";
+    private final String password = "kodigo1234";
 
     public void email(String ToEmail, String fileName) {
         Properties prop = new Properties();

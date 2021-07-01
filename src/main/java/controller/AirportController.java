@@ -66,21 +66,21 @@ public class AirportController {
     }
 
     //Overloaded method to update a flight's status
-    public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){ //DELAYED, ON TIME
+    public void updateFlightStatus(int id, FlightStatus status, LocalDateTime arrivalTime){ //DELAYED, ON TIME
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setArrivalTime(arrivalTime);
         airport.updateFlight(flight);
     }
 
-    public void updateFlightStatus(int id, String status, String cancelMotive){ //CANCELED
+    public void updateFlightStatus(int id, FlightStatus status, String cancelMotive){ //CANCELED
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setCancellationMotive(cancelMotive);
         airport.updateFlight(flight);
     }
 
-    public void updateFlightStatus(int id, String status, List<String> incidents){ //LANDED
+    public void updateFlightStatus(int id, FlightStatus status, List<String> incidents){ //LANDED
         Flight flight = getFlightDetails(id);
         flight.setStatus(status);
         flight.setIncidents(incidents);

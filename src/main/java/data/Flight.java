@@ -10,7 +10,7 @@ import java.util.List;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class Flight {
     private int id;
-    private String status;
+    private FlightStatus status;
     private Location origin;
     private Location destination;
     private LocalDateTime departureTime;
@@ -21,7 +21,7 @@ public class Flight {
     private Aircraft aircraft;
     private boolean isArrival;
 
-    public Flight(int id, String status, Location origin, Location destination, LocalDateTime departureTime,
+    public Flight(int id, FlightStatus status, Location origin, Location destination, LocalDateTime departureTime,
                   LocalDateTime arrivalTime, String airline, Aircraft aircraft, boolean isArrival) {
         this.id = id;
         this.status = status;

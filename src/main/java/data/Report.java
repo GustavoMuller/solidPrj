@@ -66,7 +66,7 @@ public class Report {
                 flight.setId((int)row.getCell(0).getNumericCellValue());
                 flight.setAirline(row.getCell(1).toString());
                 flight.setAircraft(new Aircraft(row.getCell(2).toString(), (int)row.getCell(3).getNumericCellValue(), (float)row.getCell(4).getNumericCellValue())); //MODIFICAR
-                flight.setStatus(row.getCell(5).toString());
+                flight.setStatus(Enum.valueOf(FlightStatus.class, row.getCell(5).toString()));
                 flight.setOrigin(new Location(row.getCell(6).toString(), row.getCell(7).toString()));
                 flight.setDestination(new Location(row.getCell(8).toString(), row.getCell(9).toString()));
                 flight.setDepartureTime(LocalDateTime.of(row.getCell(10).getLocalDateTimeCellValue().toLocalDate(), row.getCell(11).getLocalDateTimeCellValue().toLocalTime()));   // Work in progress
@@ -101,7 +101,7 @@ public class Report {
             row.createCell(2).setCellValue(flight.getAircraft().getModel());
             row.createCell(3).setCellValue(flight.getAircraft().getPassengerCapacity());
             row.createCell(4).setCellValue(flight.getAircraft().getRange());
-            row.createCell(5).setCellValue(flight.getStatus());
+            row.createCell(5).setCellValue(flight.getStatus().toString());
             row.createCell(6).setCellValue(flight.getOrigin().getCountry());
             row.createCell(7).setCellValue(flight.getOrigin().getCity());
             row.createCell(8).setCellValue(flight.getDestination().getCountry());
