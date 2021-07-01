@@ -1,4 +1,4 @@
-package data;
+package utils;
 
 import com.google.gson.*;
 import org.apache.http.client.utils.URIBuilder;
@@ -10,7 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 
-public class Weather {
+public final class Weather {
+    private Weather(){ }
+
     private static final String API_KEY = "bd77d9040c6d43b141e89016c0f580ce";
 
     private static HttpClient httpClient = HttpClient.newBuilder()
