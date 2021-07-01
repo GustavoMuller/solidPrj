@@ -3,6 +3,7 @@ package data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utils.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,27 +18,35 @@ public class Airport {
     public Airport(Location location) {
         this.location = location;
         this.localWeather = Weather.getLocalWeather(this.location.getCity());
+        aircraftCatalog = new ArrayList<>();
+        flights = new ArrayList<>();
     }
 
     public void addAircraft(Aircraft a){
-        if (aircraftCatalog == null) aircraftCatalog = new ArrayList<>();
         aircraftCatalog.add(a);
     }
 
     public void addFlight(Flight flight){
-        if (flights == null) flights = new ArrayList<>();
         flights.add(flight);
     }
 
+    public boolean hasFlights(){
+        return !flights.isEmpty();
+    }
+
+    public Flight getFlight(int id){
+        if (hasFlights())
+            for (Flight f : flights)
+                if (f.getId() == id) return f;
+        return null;
+    }
+
     public void updateFlight(Flight flight){
-        if (flights != null && flights.size() > 0){
-            for (Flight f : flights) {
+        if (hasFlights())
+            for (Flight f : flights)
                 if (f.getId() == flight.getId()){
-                    flights.remove(f);
-                    flights.add(flight);
+                    flights.set(flights.indexOf(f), flight);
                     break;
                 }
-            }
-        }
     }
 }

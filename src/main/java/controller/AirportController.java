@@ -3,8 +3,8 @@ package controller;
 import data.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AirportController {
@@ -12,8 +12,8 @@ public class AirportController {
     private Report report;
     private Email email;
 
-    public AirportController(){
-        airport = new Airport( new Location("El Salvador", "San Salvador"));
+    public AirportController(Location location){
+        airport = new Airport(location);
     }
 
     public void addAircraft(Aircraft a){
@@ -21,20 +21,15 @@ public class AirportController {
     }
 
     public boolean hasFlights(){
-        return !(airport.getFlights() == null || airport.getFlights().isEmpty());
+        return airport.hasFlights();
     }
 
     public boolean flightExists(int id){
-        if (hasFlights())
-            for (Flight f : airport.getFlights())
-                if (f.getId() == id) return true;
-        return false;
+        return airport.getFlight(id) != null;
     }
 
     public Flight getFlightDetails(int id){
-        for (Flight f : airport.getFlights())
-            if (f.getId() == id) return f;
-        return null;
+        return airport.getFlight(id);
     }
 
     public List<Flight> getFlightDetails(LocalDate date) {
@@ -42,11 +37,11 @@ public class AirportController {
         if (hasFlights())
             for (Flight f : airport.getFlights())
                 if (f.getArrivalTime().toLocalDate().equals(date)) flightList.add(f);
-        return flightList;
+        return Collections.unmodifiableList(flightList);
     }
 
     public List<Flight> getFlightsList(){
-        return airport.getFlights();
+        return Collections.unmodifiableList(airport.getFlights());
     }
 
     public Location getAirportLocation() {
@@ -57,34 +52,20 @@ public class AirportController {
         airport.addFlight(f);
     }
 
-    public void addFlightsFromFile(String fileName){
+    public int addFlightsFromFile(String fileName){
         report = new Report();
+        int count = 0;
         for (Flight f : report.readFile(fileName)) {
             airport.addFlight(f);
+            count++;
         }
-        System.out.println("Flights were successfully added from file!");
+
+        return count;
     }
 
-    //Overloaded method to update a flight's status
-    public void updateFlightStatus(int id, String status, LocalDateTime arrivalTime){ //DELAYED, ON TIME
-        Flight flight = getFlightDetails(id);
-        flight.setStatus(status);
-        flight.setArrivalTime(arrivalTime);
-        airport.updateFlight(flight);
-    }
-
-    public void updateFlightStatus(int id, String status, String cancelMotive){ //CANCELED
-        Flight flight = getFlightDetails(id);
-        flight.setStatus(status);
-        flight.setCancellationMotive(cancelMotive);
-        airport.updateFlight(flight);
-    }
-
-    public void updateFlightStatus(int id, String status, List<String> incidents){ //LANDED
-        Flight flight = getFlightDetails(id);
-        flight.setStatus(status);
-        flight.setIncidents(incidents);
-        airport.updateFlight(flight);
+    //Already modified object is passed to be updated in list
+    public void updateFlightStatus(Flight f){
+        airport.updateFlight(f);
     }
 
     public void createAircraftReport(int id, String fileName){
