@@ -115,13 +115,14 @@ public class AirportView {
            reportsOption = Console.readNumber("Select an option:\n1-Generate and send flight's report\n2-Generate and send flights' report by date\n3-Cancel");
 
            if(reportsOption == 1) {
-               int flight = Console.readNumber("Enter flight ID: ");
-               if(!controller.flightExists(flight)) {
-                   System.out.println("There are no flights registered with that ID");
-                   continue;}
-               controller.createAircraftReport(flight, "Report by ID " + flight);
-               controller.sendEmail(email, "Report by ID " + flight);
-               System.out.println("The report of the flight " + flight + " was sent to " + email + " successfully!!!");
+               var flight = Console.readNumber("Enter flight ID: ");
+
+               if(controller.flightExists(flight)) {
+                   controller.createAircraftReport(flight, "Report by ID " + flight);
+                   controller.sendEmail(email, "Report by ID " + flight);
+                   System.out.println("The report of the flight " + flight + " was sent to " + email + " successfully!!!");
+               } else System.out.println("There are no flights registered with that ID");
+
            } else if(reportsOption == 2) {
                var filterDate = Console.readDate();
                controller.createFlightReport(filterDate, "Report by Date " + LocalDate.now());
