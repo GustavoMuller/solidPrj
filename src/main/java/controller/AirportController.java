@@ -1,7 +1,6 @@
 package controller;
 
 import data.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +53,7 @@ public class AirportController {
 
     public int addFlightsFromFile(String fileName){
         report = new Report();
-        int count = 0;
+        var count = 0;
         for (Flight f : report.readFile(fileName)) {
             airport.addFlight(f);
             count++;
@@ -69,7 +68,7 @@ public class AirportController {
     }
 
     public void createAircraftReport(int id, String fileName){
-        Flight flight = getFlightDetails(id);
+        var flight = getFlightDetails(id);
         if (flight == null) {
             System.out.println("There are no flights with the ID entered");
         } else {
