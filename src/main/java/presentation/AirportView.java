@@ -37,25 +37,13 @@ public class AirportView {
 
             switch (option) {
                 case 1 -> displayFlightsList();
-                case 2 -> {
-                    var flightId = Console.readNumber("Enter the flight ID: ");
-                    if(controller.flightExists(flightId))
-                        displayFlight(flightId);
-                    else System.out.println("There are no flights registered with that ID.");
-                }
+                case 2 -> displayFlight(Console.readNumber("Enter the flight ID: "));
                 case 3 -> {
                     controller.addFlight(readFlightData());
                     System.out.println("The flight was added successfully!!!");
                 }
                 case 4 -> controller.addFlightsFromFile(Console.readText("Enter Flights' Filename: ", 1, 25));
-                case 5 -> {
-                    var flightId = Console.readNumber("Enter the flight ID: ");
-                    if(controller.flightExists(flightId))
-                        displayFlightStatusMenu(flightId);
-                    else System.out.println("There are no flights registered with that ID.");
-
-
-                }
+                case 5 -> displayFlightStatusMenu(Console.readNumber("Enter the flight ID: "));
                 case 6 -> displayReportsMenu();
                 case 7 -> System.out.println("Come back soon!!!");
                 default -> System.out.println("Please select a valid option!");
@@ -78,38 +66,39 @@ public class AirportView {
     }
 
     private void displayFlightStatusMenu(int flightId) {
-        int statusOption = Console.readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu");
-        var updateFlight = controller.getFlightDetails(flightId);
+        if(controller.flightExists(flightId)) System.out.println("There are no flights registered with that ID.");
+        else {
+            int statusOption = Console.readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu");
+            var updateFlight = controller.getFlightDetails(flightId);
 
-        switch(statusOption) {
-            case 1:
-                var newDateTime = Console.readDateTime("Enter the new arrival date and time:");
-                updateFlight.setStatus(FlightStatus.ON_TIME);
-                updateFlight.setArrivalTime(newDateTime);
-                break;
-            case 2:
-                var newArrivalDateTime = Console.readDateTime("Enter the new arrival date and time:");
-                updateFlight.setStatus(FlightStatus.DELAYED);
-                updateFlight.setArrivalTime(newArrivalDateTime);
-                break;
-            case 3:
-                String reason = Console.readText("Enter the specific reason why the flight was cancelled: ", 5, 100);
-                updateFlight.setStatus(FlightStatus.CANCELLED);
-                updateFlight.setCancellationMotive(reason);
+            switch(statusOption) {
+                case 1:
+                    var newDateTime = Console.readDateTime("Enter the new arrival date and time:");
+                    updateFlight.setStatus(FlightStatus.ON_TIME);
+                    updateFlight.setArrivalTime(newDateTime);
+                    break;
+                case 2:
+                    var newArrivalDateTime = Console.readDateTime("Enter the new arrival date and time:");
+                    updateFlight.setStatus(FlightStatus.DELAYED);
+                    updateFlight.setArrivalTime(newArrivalDateTime);
+                    break;
+                case 3:
+                    var reason = Console.readText("Enter the specific reason why the flight was cancelled: ", 5, 100);
+                    updateFlight.setStatus(FlightStatus.CANCELLED);
+                    updateFlight.setCancellationMotive(reason);
+                    break;
+                case 4:
+                    var incidents = Console.readText("\"Enter the list of flight incidents(if any) separated by comma: ", 5, 100);
+                    var incidentsList = Arrays.stream(incidents.trim().split(",")).toList();
+                    updateFlight.setStatus(FlightStatus.LANDED);
+                    updateFlight.setIncidents(incidentsList);
+                    break;
+                default: break;
+            }
 
-                break;
-            case 4:
-                String incidents = Console.readText("\"Enter the list of flight incidents(if any) separated by comma: ", 5, 100);
-                var incidentsList = Arrays.stream(incidents.trim().split(",")).toList();
-                updateFlight.setStatus(FlightStatus.LANDED);
-                updateFlight.setIncidents(incidentsList);
-                break;
-            default: break;
+            controller.updateFlightStatus(updateFlight);
+            if (statusOption >= 1 && statusOption <= 4) System.out.println("The flight's status was updated successfully!");
         }
-
-        controller.updateFlightStatus(updateFlight);
-        if (statusOption >= 1 && statusOption <= 4) System.out.println("The flight's status was updated successfully!");
-
     }
 
     private void displayReportsMenu() {
