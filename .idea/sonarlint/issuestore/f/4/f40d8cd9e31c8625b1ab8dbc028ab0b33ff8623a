@@ -1,0 +1,17 @@
+
+f	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(È÷ÿ
+E
+java:S6212"/Declare this local variable with "var" instead.(Î×”Ç
+J
+java:S6212"/Declare this local variable with "var" instead.(œÉÉ§ûÿÿÿÿ
+P
+java:S1161":Add the "@Override" annotation above this method signature(‡èú×
+E
+java:S6212"/Declare this local variable with "var" instead.(Áò¨Õ
+^
+java:S3252!"CUse static access with "javax.mail.Message$RecipientType" for "TO".(«€Ñûÿÿÿÿ
+J
+java:S6212$"/Declare this local variable with "var" instead.(Ë¼ê¿úÿÿÿÿ
+J
+java:S6212&"/Declare this local variable with "var" instead.(Çâ¼¤ÿÿÿÿÿ
+N	java:S106-"9Replace this use of System.out or System.err by a logger.(Ú†ê‚
