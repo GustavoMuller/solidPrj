@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,33 +16,16 @@ import java.util.stream.Collectors;
 
 public class Report {
 
-    /* Create a new excel file with the current date */
-    public void createFile(String name, String weather) {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            var sheet = workbook.createSheet("Flights " + java.time.LocalDate.now());
-            var row = sheet.createRow(0);
-            row.createCell(0).setCellValue("WEATHER");
-            row.createCell(1).setCellValue(weather);
-            row = sheet.createRow(1);
-            row.createCell(0).setCellValue("ID");
-            row.createCell(1).setCellValue("Airline");
-            row.createCell(2).setCellValue("Aircraft");
-            row.createCell(3).setCellValue("Aircraft Capacity");
-            row.createCell(4).setCellValue("Aircraft Range");
-            row.createCell(5).setCellValue("Status");
-            row.createCell(6).setCellValue("Origin Country");
-            row.createCell(7).setCellValue("Origin City");
-            row.createCell(8).setCellValue("Destination Country");
-            row.createCell(9).setCellValue("Destination City");
-            row.createCell(10).setCellValue("Departure Date");
-            row.createCell(11).setCellValue("Departure Time");
-            row.createCell(12).setCellValue("Arrival Date");
-            row.createCell(13).setCellValue("Arrival Time");
-            row.createCell(14).setCellValue("Cancel Reason");
-            row.createCell(15).setCellValue("Incidents");
-            row.createCell(16).setCellValue("Type");
+    private static final String FILE_PATH = "src/main/resources/";
+    private static final String EXT = ".xlsx";
 
-            var fileOut = new FileOutputStream("src/main/resources/" + name + ".xlsx"); /* fix with yaml later */
+    public void createFile(String name) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            var filePath = FILE_PATH + name + EXT;
+            var sheet = workbook.createSheet();
+            var row = sheet.createRow(0);
+            addTitles(row);
+            var fileOut = new FileOutputStream(filePath);
             workbook.write(fileOut);
             fileOut.close();
         } catch (IOException e) {
@@ -49,31 +33,40 @@ public class Report {
         }
     }
 
-    /* Read report and add flights to file */
+    private void addTitles(Row row) {
+        var i = 0;
+        for(String title : getTitles()) {
+            row.createCell(i).setCellValue(title);
+            i++;
+        }
+    }
+
+    private String[] getTitles() {
+        return new String[] {"ID", "Airline", "Aircraft", "Aircraft Capacity", "Aircraft Range", "Status", "Origin Country", "Origin City",
+                "Destination Country", "Destination City", "Departure Date", "Departure Time", "Arrival Date", "Arrival Time", "Cancel Reason", "Incidents", "Type"};
+    }
+
     public List<Flight> readFile(String name) {
-        Flight flight;
+        var filePath = FILE_PATH + name + EXT;
         ArrayList<Flight> flightList = new ArrayList<>();
         var i = 1;
-        try (var workbook = WorkbookFactory.create(new File("src/main/resources/" + name + ".xlsx"))) {
+        try (var workbook = WorkbookFactory.create(new File(filePath))) {
             var sheet = workbook.getSheetAt(0);
 
             while (sheet.getRow(i) != null) {
                 var row = sheet.getRow(i);
-                String cel15 = row.getCell(15).toString();
-                List<String> incidents = Arrays.asList(cel15.split(","));
-
-                flight = new Flight();
-                flight.setId((int)row.getCell(0).getNumericCellValue());
-                flight.setAirline(row.getCell(1).toString());
-                flight.setAircraft(new Aircraft(row.getCell(2).toString(), (int)row.getCell(3).getNumericCellValue(), (float)row.getCell(4).getNumericCellValue())); //MODIFICAR
-                flight.setStatus(Enum.valueOf(FlightStatus.class, row.getCell(5).toString()));
-                flight.setOrigin(new Location(row.getCell(6).toString(), row.getCell(7).toString()));
-                flight.setDestination(new Location(row.getCell(8).toString(), row.getCell(9).toString()));
-                flight.setDepartureTime(LocalDateTime.of(row.getCell(10).getLocalDateTimeCellValue().toLocalDate(), row.getCell(11).getLocalDateTimeCellValue().toLocalTime()));   // Work in progress
-                flight.setArrivalTime(LocalDateTime.of(row.getCell(12).getLocalDateTimeCellValue().toLocalDate(), row.getCell(13).getLocalDateTimeCellValue().toLocalTime()));     // Work in progress
-                flight.setCancellationMotive(row.getCell(14).toString());
-                flight.setIncidents(incidents);
-                flight.setArrival(row.getCell(16).getBooleanCellValue());
+                var flight = new Flight();
+                setId(flight, row);
+                setAirline(flight, row);
+                setAircraft(flight, row);
+                setStatus(flight, row);
+                setOrigin(flight, row);
+                setDestination(flight, row);
+                setDepartureTime(flight, row);
+                setArrivalTime(flight, row);
+                setCancelMotive(flight, row);
+                setIncidents(flight, row);
+                setArrival(flight, row);
                 i++;
                 flightList.add(flight);
             }
@@ -84,12 +77,59 @@ public class Report {
         return Collections.emptyList();
     }
 
-    /* Add Flight to the report */
+
+    private void setId(Flight flight, Row row) {
+        flight.setId((int)row.getCell(0).getNumericCellValue());
+    }
+
+    private void setAirline(Flight flight, Row row) {
+        flight.setAirline(row.getCell(1).toString());
+    }
+
+    private void setAircraft(Flight flight, Row row) {
+        flight.setAircraft(new Aircraft(row.getCell(2).toString(), (int)row.getCell(3).getNumericCellValue(), (float)row.getCell(4).getNumericCellValue()));
+    }
+
+    private void setStatus(Flight flight, Row row) {
+        flight.setStatus(Enum.valueOf(FlightStatus.class, row.getCell(5).toString()));
+    }
+
+    private void setOrigin(Flight flight, Row row) {
+        flight.setOrigin(new Location(row.getCell(6).toString(), row.getCell(7).toString()));
+    }
+
+    private void setDestination(Flight flight, Row row) {
+        flight.setDestination(new Location(row.getCell(8).toString(), row.getCell(9).toString()));
+    }
+
+    private void setDepartureTime(Flight flight, Row row) {
+        flight.setDepartureTime(LocalDateTime.of(row.getCell(10).getLocalDateTimeCellValue().toLocalDate(), row.getCell(11).getLocalDateTimeCellValue().toLocalTime()));
+    }
+
+    private void setArrivalTime(Flight flight, Row row) {
+        flight.setArrivalTime(LocalDateTime.of(row.getCell(12).getLocalDateTimeCellValue().toLocalDate(), row.getCell(13).getLocalDateTimeCellValue().toLocalTime()));
+    }
+
+    private void setCancelMotive(Flight flight, Row row) {
+        flight.setCancellationMotive(row.getCell(14).toString());
+    }
+
+    private void setIncidents(Flight flight, Row row) {
+        var incident = row.getCell(15).toString();
+        List<String> incidents = Arrays.asList(incident.split(","));
+        flight.setIncidents(incidents);
+    }
+
+    private void setArrival(Flight flight, Row row) {
+        flight.setArrival(row.getCell(16).getBooleanCellValue());
+    }
+
     public void addToReport(Flight flight, String fileName, String weather) {
+        var filePath = FILE_PATH + fileName + EXT;
         try {
-            var file = new File("src/main/resources/" + fileName + ".xlsx");
+            var file = new File(filePath);
             if (!file.exists()) {
-                createFile(fileName, weather);
+                createFile(fileName);
             }
             var workbook = WorkbookFactory.create(file);
             var sheet = workbook.getSheetAt(0);
