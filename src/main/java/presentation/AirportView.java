@@ -37,12 +37,7 @@ public class AirportView {
 
             switch (option) {
                 case 1 -> displayFlightsList();
-                case 2 -> {
-                    if(controller.hasFlights()) {
-                        var flightId = Console.readNumber("Enter the flight ID: ");
-                        displayFlight(flightId);}
-                    else System.out.println("There are no flights registered at the moment.");
-                    }
+                case 2 -> displayFlight();
                 case 3 -> {
                     controller.addFlight(readFlightData());
                     System.out.println("The flight was added successfully!!!");
@@ -57,10 +52,15 @@ public class AirportView {
         } while(option != 7);
     }
 
-    private void displayFlight(int flightId) {
-        if(controller.flightExists(flightId))
-            System.out.println(controller.getFlightDetails(flightId));
-        else System.out.println("There are no flights registered with that ID.");
+    private void displayFlight() {
+        if(controller.hasFlights()) {
+            var flightId = Console.readNumber("Enter flight ID: ");
+            if(controller.flightExists(flightId))
+                System.out.println(controller.getFlightDetails(flightId));
+            else System.out.println("There are no flights registered with that ID.");
+        }
+        else System.out.println("There are no flights registered at the moment.");
+
     }
 
     private void displayFlightsList(){
