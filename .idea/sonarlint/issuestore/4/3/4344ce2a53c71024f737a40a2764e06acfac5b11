@@ -1,0 +1,42 @@
+
+Š
+java:S1192["nDefine a constant instead of duplicating this literal "The flight's status was updated successfully!" 4 times.(¤ª¤v8¼ÖÏ‡¡/
+U	java:S106."9Replace this use of System.out or System.err by a logger.(…‰Øò8ƒÜÆÜ /
+T	java:S1061"9Replace this use of System.out or System.err by a logger.(¯úÇw8àÖÏ‡¡/
+Z	java:S1067"9Replace this use of System.out or System.err by a logger.(¬£Ô³ıÿÿÿÿ8áÖÏ‡¡/
+Z	java:S106@"9Replace this use of System.out or System.err by a logger.(Ì‚°Ãûÿÿÿÿ8„ÜÆÜ /
+Z	java:S106A"9Replace this use of System.out or System.err by a logger.(«ã¢Ñøÿÿÿÿ8ãÖÏ‡¡/
+Z	java:S106H"9Replace this use of System.out or System.err by a logger.(ï’–ıüÿÿÿÿ8…ÜÆÜ /
+U	java:S106I"9Replace this use of System.out or System.err by a logger.(ñ›¾À8åÖÏ‡¡/
+V
+java:S1854M"9Remove this useless assignment to local variable "input".(áÔŞï8åÖÏ‡¡/
+Z	java:S106Q"9Replace this use of System.out or System.err by a logger.(‹û¦ãşÿÿÿÿ8çÖÏ‡¡/
+T	java:S106["9Replace this use of System.out or System.err by a logger.(¤ª¤v8èÖÏ‡¡/
+T	java:S106`"9Replace this use of System.out or System.err by a logger.(¤ª¤v8èÖÏ‡¡/
+T	java:S106e"9Replace this use of System.out or System.err by a logger.(¤ª¤v8éÖÏ‡¡/
+T	java:S106k"9Replace this use of System.out or System.err by a logger.(¤ª¤v8êÖÏ‡¡/
+U	java:S106|"9Replace this use of System.out or System.err by a logger.(Î¤ƒó8ìÖÏ‡¡/
+[	java:S106€"9Replace this use of System.out or System.err by a logger.(ŸÇÌõùÿÿÿÿ8íÖÏ‡¡/
+V	java:S106…"9Replace this use of System.out or System.err by a logger.(şÉ‡ó8íÖÏ‡¡/
+[	java:S106‘"9Replace this use of System.out or System.err by a logger.(¶Û¼Íøÿÿÿÿ8ÜÆÜ /
+V	java:S106—"9Replace this use of System.out or System.err by a logger.(¿ü§8 ÜÆÜ /
+M
+java:S6212"/Declare this local variable with "var" instead.(ıî 8ôÖÏ‡¡/
+V	java:S106¡"9Replace this use of System.out or System.err by a logger.(‡–’ç8ôÖÏ‡¡/
+V	java:S106§"9Replace this use of System.out or System.err by a logger.(¯½º8úÖÏ‡¡/
+[	java:S106°"9Replace this use of System.out or System.err by a logger.(¶Û¼Íøÿÿÿÿ8£ÜÆÜ /
+[	java:S106¶"9Replace this use of System.out or System.err by a logger.(Åñ¸æüÿÿÿÿ8£ÜÆÜ /
+L
+java:S6212¼"/Declare this local variable with "var" instead.(¶Ù58¤ÜÆÜ /
+[	java:S106À"9Replace this use of System.out or System.err by a logger.(‰Ô‘°ùÿÿÿÿ8¤ÜÆÜ /
+[	java:S106Æ"9Replace this use of System.out or System.err by a logger.(İ¯ºçÿÿÿÿÿ8¥ÜÆÜ /
+M
+java:S6212Ì"/Declare this local variable with "var" instead.(‚Ï¿¶8€×Ï‡¡/
+V	java:S106Ğ"9Replace this use of System.out or System.err by a logger.(¸ˆşÔ8€×Ï‡¡/
+V	java:S106Ö"9Replace this use of System.out or System.err by a logger.(¬€ºÄ8‚×Ï‡¡/
+[	java:S106Û"9Replace this use of System.out or System.err by a logger.(¶Û¼Íøÿÿÿÿ8›ÜÆÜ /
+[	java:S106ü"9Replace this use of System.out or System.err by a logger.(ò„Öæøÿÿÿÿ8‡×Ï‡¡/
+[	java:S106"9Replace this use of System.out or System.err by a logger.(„Ú½Äûÿÿÿÿ8ˆ×Ï‡¡/
+[	java:S106‚"9Replace this use of System.out or System.err by a logger.(¬µöÌúÿÿÿÿ8ˆ×Ï‡¡/
+G
+java:S1481M"*Remove this unused "input" local variable.(áÔŞï8‰×Ï‡¡/

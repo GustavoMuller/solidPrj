@@ -1,0 +1,9 @@
+
+v
+java:S1450"TRemove the "email" field and declare it as a local variable in the relevant methods.(—Ò»ýÿÿÿÿÿ8Ž¦¾‡¡/
+L
+java:S62129"/Declare this local variable with "var" instead.(æÕ¿¼8‘ÁÙ ¦/
+L
+java:S6212H"/Declare this local variable with "var" instead.(£À‘Š8š¦¾‡¡/
+U	java:S106J"9Replace this use of System.out or System.err by a logger.(öûèö8Ÿ¦¾‡¡/
+U	java:S106T"9Replace this use of System.out or System.err by a logger.(‡Ð»³8 ¦¾‡¡/
