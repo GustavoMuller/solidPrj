@@ -7,12 +7,15 @@ import java.util.Scanner;
 
 public final class Console {
 
-    private Console() {}
-
+    private static final String DATE_REGEX = "(\\d{4})-(\\d{2})-(\\d{2})";
+    private static final String NUMBER_REGEX = "[0-9]+";
+    private static final String TIME_REGEX = "(\\d{2}):(\\d{2})";
+    private static final String EMAIL_REGEX = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
     private static final Scanner userInput = new Scanner(System.in);
 
+    private Console() {}
+
     public static int readNumber(String prompt) {
-        final var NUMBER_REGEX = "[0-9]+";
         String input;
 
         while(true) {
@@ -41,7 +44,6 @@ public final class Console {
     }
 
     public static LocalDate readDate() {
-        final var DATE_REGEX = "(\\d{4})-(\\d{2})-(\\d{2})";
         String date;
 
         while(true) {
@@ -56,7 +58,6 @@ public final class Console {
     }
 
     public static LocalTime readTime() {
-        final var TIME_REGEX = "(\\d{2}):(\\d{2})";
         String time;
 
         while(true) {
@@ -72,14 +73,11 @@ public final class Console {
 
     public static LocalDateTime readDateTime(String prompt) {
         System.out.println(prompt);
-        var date = readDate();
-        var time = readTime();
-        return LocalDateTime.of(date, time);
+        return LocalDateTime.of( readDate(), readTime());
     }
 
     public static String readEmail(String prompt) {
         String input;
-        final var EMAIL_REGEX = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
 
         while(true) {
             System.out.println(prompt);
