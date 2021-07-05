@@ -37,7 +37,12 @@ public class AirportView {
 
             switch (option) {
                 case 1 -> displayFlightsList();
-                case 2 -> displayFlight(Console.readNumber("Enter the flight ID: "));
+                case 2 -> {
+                    if(controller.hasFlights()) {
+                        var flightId = Console.readNumber("Enter the flight ID: ");
+                        displayFlight(flightId);}
+                    else System.out.println("There are no flights registered at the moment.");
+                    }
                 case 3 -> {
                     controller.addFlight(readFlightData());
                     System.out.println("The flight was added successfully!!!");
@@ -66,7 +71,7 @@ public class AirportView {
     }
 
     private void displayFlightStatusMenu(int flightId) {
-        if(controller.flightExists(flightId)) System.out.println("There are no flights registered with that ID.");
+        if(!controller.flightExists(flightId)) System.out.println("There are no flights registered with that ID.");
         else {
             int statusOption = Console.readNumber("Select the new status for the flight:\n1-On time\n2-Delayed\n3-Cancelled\n4-Landed\n5-Return to menu");
             var updateFlight = controller.getFlightDetails(flightId);
@@ -128,7 +133,7 @@ public class AirportView {
     }
 
     private Flight readFlightData() {
-        var flightId = Console.readNumber("Enter flight ID: ");
+        var flightId = controller.getFlightsList().size() + 1;
         var countryOrigin = Console.readText("Enter country of origin: ", 2, 50);
         var cityOrigin = Console.readText("Enter city of origin: ", 2, 50);
         var countryDestination = Console.readText("Enter country of destination: ", 2, 50);
